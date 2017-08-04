@@ -20,8 +20,7 @@ public class EmbeddedProductDaoTest {
     @Test
     public void addProductTest() throws Exception {
         Product product = new Product();
-        product.setInfo("Test info");
-        product.setTitle("Test title");
+        product.setName("Test title");
         mProductDao.addProduct(product);
         String errorMessage = "Added product object is not correspond to retrieved moment object";
         assertEquals(errorMessage, product, mProductDao.getProduct(product.getId()));
@@ -31,20 +30,18 @@ public class EmbeddedProductDaoTest {
     public void deleteExistedProductTest() throws Exception {
         Product product = new Product();
         mProductDao.addProduct(product);
-        product.setInfo("Test info");
-        product.setTitle("Test title");
+        product.setName("Test title");
         mProductDao.deleteProduct(product.getId());
         String errorMessage = "After deleting product object however the same object exists in storage";
         Product resultProduct = mProductDao.getProduct(product.getId());
-        assertEquals(errorMessage, resultProduct.getTitle(), "");
-        assertEquals(errorMessage, resultProduct.getInfo(), "");
+        assertEquals(errorMessage, resultProduct.getName(), "");
     }
 
     @Test
     public void updateProductTest() throws Exception {
         Product product = new Product();
         mProductDao.addProduct(product);
-        product.setTitle("Test title");
+        product.setName("Test title");
         mProductDao.updateProduct(product.getId(), product);
         String errorMessage = "After updating product object however" +
                 " doesn't correspond to updated product object";
@@ -57,8 +54,7 @@ public class EmbeddedProductDaoTest {
         String errorMessage = "Expected empty object but has been retrieved actual object" +
                 " after query for not existing object";
         Product resultProduct = mProductDao.getProduct(product.getId());
-        assertEquals(errorMessage, resultProduct.getTitle(), "");
-        assertEquals(errorMessage, resultProduct.getInfo(), "");
+        assertEquals(errorMessage, resultProduct.getName(), "");
     }
 
     @After

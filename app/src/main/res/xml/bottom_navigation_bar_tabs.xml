@@ -1,0 +1,17 @@
+<tabs>
+    <tab
+        id="@+id/tab_catalog"
+        icon="@drawable/ic_action_catalog"
+        name="@string/menu_item_catalog_button_text"
+        barColorWhenSelected="#fab168" />
+    <tab
+        id="@+id/tab_search"
+        icon="@drawable/ic_action_search"
+        name="@string/menu_item_search_button_text"
+        barColorWhenSelected="#f1db4b" />
+    <tab
+        id="@+id/tab_contacts"
+        icon="@drawable/ic_action_contacts"
+        name="@string/menu_item_contacts_button_text"
+        barColorWhenSelected="#ce7fde" />
+</tabs>

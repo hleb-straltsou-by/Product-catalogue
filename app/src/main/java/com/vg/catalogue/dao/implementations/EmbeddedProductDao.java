@@ -20,8 +20,7 @@ public class EmbeddedProductDao implements ProductDao {
         Product product;
         for(int i = 0; i < INITIAL_PRODUCT_LIST_SIZE; i++){
             product = new Product();
-            product.setTitle("Title #" + i);
-            product.setInfo("Indo #" + i);
+            product.setName("Title #" + i);
             mProducts.add(product);
         }
     }
@@ -51,8 +50,15 @@ public class EmbeddedProductDao implements ProductDao {
     public void updateProduct(UUID id, Product product) {
         for(int i = 0; i < mProducts.size(); i++){
             if(mProducts.get(i).getId().equals(id)){
-                mProducts.get(i).setTitle(product.getTitle());
-                mProducts.get(i).setInfo(product.getInfo());
+                mProducts.get(i).setName(product.getName());
+                mProducts.get(i).setAllNames(product.getAllNames());
+                mProducts.get(i).setConsumptionRate(product.getConsumptionRate());
+                mProducts.get(i).setCategory(product.getCategory());
+                mProducts.get(i).setDaysTillLastHarvest(product.getDaysTillLastHarvest());
+                mProducts.get(i).setHarmfulOrganismOrDisease(product.getHarmfulOrganismOrDisease());
+                mProducts.get(i).setOperatingPrinciple(product.getOperatingPrinciple());
+                mProducts.get(i).setProcessedCultures(product.getProcessedCultures());
+                mProducts.get(i).setTreatmentsMultiplicity(product.getTreatmentsMultiplicity());
             }
         }
     }

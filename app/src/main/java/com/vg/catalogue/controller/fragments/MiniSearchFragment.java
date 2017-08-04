@@ -5,30 +5,29 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.EditText;
 
 import com.vg.catalogue.R;
 
-public class AdFragment extends Fragment {
+public class MiniSearchFragment extends Fragment {
 
-    private TextView adTextView;
+    private EditText mSearchEditText;
 
-    public static AdFragment newInstance() {
-        return new AdFragment();
+    public static MiniSearchFragment newInstance() {
+        return new MiniSearchFragment();
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_ad, container, false);
+        View v = inflater.inflate(R.layout.fragment_mini_search, container, false);
 
-        adTextView = (TextView) v.findViewById(R.id.ad_text_view);
-        adTextView.setText("Реклама");
+        mSearchEditText = (EditText) v.findViewById(R.id.search_edit_text);
 
         return v;
     }

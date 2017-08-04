@@ -26,13 +26,13 @@ public abstract class MultipleVerticalFragmentsActivity extends AppCompatActivit
         for(Map.Entry<SideEnum, Fragment> entry : fragmentMap.entrySet()){
             switch (entry.getKey()){
                 case TOP:
-                    transaction.add(R.id.top_container, entry.getValue());
+                    transaction.add(R.id.single_top_container, entry.getValue());
                     break;
                 case CENTER:
-                    transaction.add(R.id.center_container, entry.getValue());
+                    transaction.add(R.id.single_center_container, entry.getValue());
                     break;
                 case BOTTOM:
-                    transaction.add(R.id.bottom_container, entry.getValue());
+                    transaction.add(R.id.single_bottom_container, entry.getValue());
                     break;
                 default:
                     break;
