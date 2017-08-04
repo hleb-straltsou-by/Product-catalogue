@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/top_container"
+        android:id="@+id/single_top_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|top"
@@ -14,7 +15,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/center_container"
+        android:id="@+id/single_center_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|center_vertical"
@@ -23,7 +24,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/bottom_container"
+        android:id="@+id/single_bottom_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
