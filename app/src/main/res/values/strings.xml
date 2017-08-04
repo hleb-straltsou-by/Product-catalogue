@@ -3,4 +3,5 @@
     <string name="menu_item_catalog_button_text">Каталог</string>
     <string name="menu_item_search_button_text">Поиск</string>
     <string name="menu_item_contacts_button_text">Контакты</string>
+    <string name="action_search">поиск</string>
 </resources>
