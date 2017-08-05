@@ -1,17 +1,18 @@
 package com.vg.catalogue.controller.fragments;
 
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.shapes.Shape;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+
+import com.google.android.gms.ads.MobileAds;
 import com.vg.catalogue.R;
 
 public class BottomAdFragment extends Fragment {
@@ -19,6 +20,8 @@ public class BottomAdFragment extends Fragment {
     private AdView mAdView;
 
     private static final String BOTTOM_AD_VIEW_UNIT_ID = "bottom_ad_view";
+
+    private static final String ADMOB_APP_ID = "ca-app-pub-3940256099942544~3347511713";
 
     public static BottomAdFragment newInstance() {
         return new BottomAdFragment();
@@ -34,11 +37,13 @@ public class BottomAdFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_bottom_ad, container, false);
 
+        MobileAds.initialize(getActivity().getApplicationContext(), ADMOB_APP_ID);
+
         // Create a banner ad. The ad size and ad unit ID must be set before calling loadAd.
         mAdView = (AdView) v.findViewById(R.id.bottom_ad_view);
+
         mAdView.setAdSize(AdSize.BANNER);
         mAdView.setAdUnitId(BOTTOM_AD_VIEW_UNIT_ID);
-        mAdView.setBackgroundResource(R.drawable.background_ad);
 
         // Create an ad request.
         AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
@@ -48,6 +53,40 @@ public class BottomAdFragment extends Fragment {
 
         // Start loading the ad.
         mAdView.loadAd(adRequestBuilder.build());
+
+        mAdView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+                Log.i("Ads", "onAdLoaded");
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                // Code to be executed when an ad request fails.
+                Log.i("Ads", "onAdFailedToLoad");
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen.
+                Log.i("Ads", "onAdOpened");
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                // Code to be executed when the user has left the app.
+                Log.i("Ads", "onAdLeftApplication");
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when when the user is about to return
+                // to the app after tapping on an ad.
+                Log.i("Ads", "onAdClosed");
+            }
+        });
 
         return v;
     }
