@@ -4,4 +4,13 @@
     <string name="menu_item_search_button_text">Поиск</string>
     <string name="menu_item_contacts_button_text">Контакты</string>
     <string name="action_search">поиск</string>
+
+    <!-- Product attributes -->
+    <string name="product_all_names">Торговое название, препаративная форма, действующее вещество, фирма</string>
+    <string name="product_consumption_rate">Норма расхода препарата, л/га, кг/га</string>
+    <string name="product_processed_cultures">Культура, обрабатываемые объекты</string>
+    <string name="product_harmful_organism_and_disease">Вредный организм, заболевание</string>
+    <string name="product_operating_principle">Способ, время обработки, ограничения</string>
+    <string name="product_days_till_last_harvest">Срок последней обработки (в днях до сбора урожая)</string>
+    <string name="product_treatments_multiplicity">Кратность обработок</string>
 </resources>

@@ -15,6 +15,7 @@ import com.vg.catalogue.R;
 import com.vg.catalogue.controller.fragments.CatalogFragment;
 import com.vg.catalogue.controller.fragments.ContactsFragment;
 import com.vg.catalogue.controller.fragments.FullSearchFragment;
+import com.vg.catalogue.controller.fragments.ProductFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -62,7 +63,8 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent;
                 switch (tabId){
                     case R.id.tab_catalog:
-                        if(mFragment.getClass() != CatalogFragment.class) {
+                        if(mFragment.getClass() != CatalogFragment.class &&
+                                mFragment.getClass() != ProductFragment.class) {
                             intent = MainActivity.newIntent(MainActivity.this, CatalogFragment.class);
                             startActivity(intent);
                         }
