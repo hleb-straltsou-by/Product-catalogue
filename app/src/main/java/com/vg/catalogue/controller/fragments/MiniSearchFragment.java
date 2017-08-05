@@ -2,16 +2,16 @@ package com.vg.catalogue.controller.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import com.vg.catalogue.R;
 
 public class MiniSearchFragment extends Fragment {
 
-    private EditText mSearchEditText;
+    private SearchView mSearchView;
 
     public static MiniSearchFragment newInstance() {
         return new MiniSearchFragment();
@@ -27,7 +27,13 @@ public class MiniSearchFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_mini_search, container, false);
 
-        mSearchEditText = (EditText) v.findViewById(R.id.search_edit_text);
+        mSearchView = (SearchView) v.findViewById(R.id.search_view);
+        mSearchView.setOnSearchClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                // searching
+            }
+        });
 
         return v;
     }
