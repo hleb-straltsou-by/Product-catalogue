@@ -2,6 +2,7 @@ package com.vg.catalogue.model;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.UUID;
 
@@ -12,8 +13,6 @@ public class Product {
     private String mName;
 
     private String mAllNames;
-
-    private String mCategory;
 
     private String mConsumptionRate;
 
@@ -27,17 +26,19 @@ public class Product {
 
     private int mTreatmentsMultiplicity;
 
+    private int mActiveSubstanceId;
+
     public Product(){
         mId = UUID.randomUUID();
         mName = "";
         mAllNames = "";
         mConsumptionRate = "";
         mProcessedCultures = "";
-        mCategory = "";
         mHarmfulOrganismOrDisease = "";
         mOperatingPrinciple = "";
         mDaysTillLastHarvest = 0;
         mTreatmentsMultiplicity = 0;
+        mActiveSubstanceId = 0;
     }
 
     public Product(UUID id){
@@ -46,11 +47,11 @@ public class Product {
         mAllNames = "";
         mConsumptionRate = "";
         mProcessedCultures = "";
-        mCategory = "";
         mHarmfulOrganismOrDisease = "";
         mOperatingPrinciple = "";
         mDaysTillLastHarvest = 0;
         mTreatmentsMultiplicity = 0;
+        mActiveSubstanceId = 0;
     }
 
     public UUID getId() {
@@ -83,14 +84,6 @@ public class Product {
 
     public void setConsumptionRate(String consumptionRate) {
         mConsumptionRate = consumptionRate;
-    }
-
-    public String getCategory() {
-        return mCategory;
-    }
-
-    public void setCategory(String category) {
-        mCategory = category;
     }
 
     public String getProcessedCultures() {
@@ -133,6 +126,14 @@ public class Product {
         mTreatmentsMultiplicity = treatmentsMultiplicity;
     }
 
+    public int getActiveSubstanceId() {
+        return mActiveSubstanceId;
+    }
+
+    public void setActiveSubstanceId(int activeSubstanceId) {
+        mActiveSubstanceId = activeSubstanceId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -147,11 +148,11 @@ public class Product {
                 .append(mId, product.mId)
                 .append(mName, product.mName)
                 .append(mAllNames, product.mAllNames)
-                .append(mCategory, product.mCategory)
                 .append(mConsumptionRate, product.mConsumptionRate)
                 .append(mProcessedCultures, product.mProcessedCultures)
                 .append(mHarmfulOrganismOrDisease, product.mHarmfulOrganismOrDisease)
                 .append(mOperatingPrinciple, product.mOperatingPrinciple)
+                .append(mActiveSubstanceId, product.mActiveSubstanceId)
                 .isEquals();
     }
 
@@ -161,13 +162,29 @@ public class Product {
                 .append(mId)
                 .append(mName)
                 .append(mAllNames)
-                .append(mCategory)
                 .append(mConsumptionRate)
                 .append(mProcessedCultures)
                 .append(mHarmfulOrganismOrDisease)
                 .append(mOperatingPrinciple)
                 .append(mDaysTillLastHarvest)
                 .append(mTreatmentsMultiplicity)
+                .append(mActiveSubstanceId)
                 .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("mId", mId)
+                .append("mName", mName)
+                .append("mAllNames", mAllNames)
+                .append("mConsumptionRate", mConsumptionRate)
+                .append("mProcessedCultures", mProcessedCultures)
+                .append("mHarmfulOrganismOrDisease", mHarmfulOrganismOrDisease)
+                .append("mOperatingPrinciple", mOperatingPrinciple)
+                .append("mDaysTillLastHarvest", mDaysTillLastHarvest)
+                .append("mTreatmentsMultiplicity", mTreatmentsMultiplicity)
+                .append("mActiveSubstance", mActiveSubstanceId)
+                .toString();
     }
 }
