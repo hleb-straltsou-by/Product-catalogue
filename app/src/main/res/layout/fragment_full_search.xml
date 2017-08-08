@@ -45,6 +45,19 @@
         android:layout_margin="15dp"
         android:padding="10dp"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/search_active_substance"
+        style="?android:listSeparatorTextViewStyle"/>
+
+    <EditText
+        android:id="@+id/search_active_substance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:padding="10dp"/>
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

@@ -1,16 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <android.support.v7.widget.SearchView
-        android:id="@+id/search_view"
+    <EditText
+        android:id="@+id/mini_search_edit_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/background_search"
+        android:padding="10dp"
+        android:layout_margin="10dp"
+        android:layout_weight="0.2"/>
+
+    <ImageButton
+        android:id="@+id/mini_search_image_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/search_button"
+        android:background="@drawable/background_button"
+        android:layout_margin="10dp"
         android:padding="7dp"
-        android:layout_margin="10dp"/>
+        android:layout_weight="0.8"/>
 
 </LinearLayout>
