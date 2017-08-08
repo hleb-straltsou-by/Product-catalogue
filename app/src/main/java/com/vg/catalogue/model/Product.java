@@ -8,15 +8,11 @@ import java.util.UUID;
 
 public class Product {
 
-    private UUID mId;
-
     private String mName;
 
     private String mAllNames;
 
-    private String mConsumptionRate;
-
-    private String mProcessedCultures;
+    private String mConsumptionRateAndProcessedCultures;
 
     private String mHarmfulOrganismOrDisease;
 
@@ -29,37 +25,14 @@ public class Product {
     private int mActiveSubstanceId;
 
     public Product(){
-        mId = UUID.randomUUID();
         mName = "";
         mAllNames = "";
-        mConsumptionRate = "";
-        mProcessedCultures = "";
+        mConsumptionRateAndProcessedCultures = "";
         mHarmfulOrganismOrDisease = "";
         mOperatingPrinciple = "";
         mDaysTillLastHarvest = 0;
         mTreatmentsMultiplicity = 0;
         mActiveSubstanceId = 0;
-    }
-
-    public Product(UUID id){
-        mId = id;
-        mName = "";
-        mAllNames = "";
-        mConsumptionRate = "";
-        mProcessedCultures = "";
-        mHarmfulOrganismOrDisease = "";
-        mOperatingPrinciple = "";
-        mDaysTillLastHarvest = 0;
-        mTreatmentsMultiplicity = 0;
-        mActiveSubstanceId = 0;
-    }
-
-    public UUID getId() {
-        return mId;
-    }
-
-    public void setId(UUID id) {
-        mId = id;
     }
 
     public String getName() {
@@ -78,20 +51,12 @@ public class Product {
         mAllNames = allNames;
     }
 
-    public String getConsumptionRate() {
-        return mConsumptionRate;
+    public String getConsumptionRateAndProcessedCultures() {
+        return mConsumptionRateAndProcessedCultures;
     }
 
-    public void setConsumptionRate(String consumptionRate) {
-        mConsumptionRate = consumptionRate;
-    }
-
-    public String getProcessedCultures() {
-        return mProcessedCultures;
-    }
-
-    public void setProcessedCultures(String processedCultures) {
-        mProcessedCultures = processedCultures;
+    public void setConsumptionRateAndProcessedCultures(String consumptionRateAndProcessedCultures) {
+        mConsumptionRateAndProcessedCultures = consumptionRateAndProcessedCultures;
     }
 
     public String getHarmfulOrganismOrDisease() {
@@ -145,25 +110,21 @@ public class Product {
         return new EqualsBuilder()
                 .append(mDaysTillLastHarvest, product.mDaysTillLastHarvest)
                 .append(mTreatmentsMultiplicity, product.mTreatmentsMultiplicity)
-                .append(mId, product.mId)
+                .append(mActiveSubstanceId, product.mActiveSubstanceId)
                 .append(mName, product.mName)
                 .append(mAllNames, product.mAllNames)
-                .append(mConsumptionRate, product.mConsumptionRate)
-                .append(mProcessedCultures, product.mProcessedCultures)
+                .append(mConsumptionRateAndProcessedCultures, product.mConsumptionRateAndProcessedCultures)
                 .append(mHarmfulOrganismOrDisease, product.mHarmfulOrganismOrDisease)
                 .append(mOperatingPrinciple, product.mOperatingPrinciple)
-                .append(mActiveSubstanceId, product.mActiveSubstanceId)
                 .isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
-                .append(mId)
                 .append(mName)
                 .append(mAllNames)
-                .append(mConsumptionRate)
-                .append(mProcessedCultures)
+                .append(mConsumptionRateAndProcessedCultures)
                 .append(mHarmfulOrganismOrDisease)
                 .append(mOperatingPrinciple)
                 .append(mDaysTillLastHarvest)
@@ -172,19 +133,5 @@ public class Product {
                 .toHashCode();
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .append("mId", mId)
-                .append("mName", mName)
-                .append("mAllNames", mAllNames)
-                .append("mConsumptionRate", mConsumptionRate)
-                .append("mProcessedCultures", mProcessedCultures)
-                .append("mHarmfulOrganismOrDisease", mHarmfulOrganismOrDisease)
-                .append("mOperatingPrinciple", mOperatingPrinciple)
-                .append("mDaysTillLastHarvest", mDaysTillLastHarvest)
-                .append("mTreatmentsMultiplicity", mTreatmentsMultiplicity)
-                .append("mActiveSubstance", mActiveSubstanceId)
-                .toString();
-    }
+
 }
