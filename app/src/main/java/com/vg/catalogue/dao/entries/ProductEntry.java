@@ -14,15 +14,12 @@ public abstract class ProductEntry implements BaseColumns {
 
     public static final String TABLE_NAME_HERBICIDES_PAV = "herbicides_pav";
 
-    public static final String COLUMN_NAME_ENTRY_ID = "product_id";
-
     public static final String COLUMN_NAME_NAME = "name";
 
     public static final String COLUMN_NAME_ALL_NAMES = "all_names";
 
-    public static final String COLUMN_NAME_CONSUMPTION_RATE = "consumption_rate";
-
-    public static final String COLUMN_NAME_PROCESSED_CULTURES = "processed_cultures";
+    public static final String COLUMN_NAME_CONSUMPTION_RATE_AND_PROCESSED_CULTURES =
+            "consumption_rate_and_processed_cultures";
 
     public static final String COLUMN_NAME_HARMFUL_ORGANISM_DISEASE = "harmful_organism_disease";
 

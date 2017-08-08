@@ -20,6 +20,8 @@ public class FullSearchFragment extends Fragment {
 
     private EditText mAllNamesEditText;
 
+    private EditText mActiveSubstanceEditText;
+
     private ImageButton mSearchImageButton;
 
     @Override
@@ -49,6 +51,14 @@ public class FullSearchFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 mCultureEditText.setText("");
+            }
+        });
+
+        mActiveSubstanceEditText = (EditText) v.findViewById(R.id.search_active_substance);
+        mActiveSubstanceEditText.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                mActiveSubstanceEditText.setText("");
             }
         });
 

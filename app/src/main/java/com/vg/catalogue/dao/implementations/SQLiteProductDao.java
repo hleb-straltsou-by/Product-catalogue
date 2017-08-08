@@ -5,10 +5,10 @@ import android.content.Context;
 import com.vg.catalogue.dao.interfaces.ProductDao;
 import com.vg.catalogue.dao.utils.ProductDbHelper;
 import com.vg.catalogue.enums.ProductCategoryEnum;
+import com.vg.catalogue.model.ActiveSubstance;
 import com.vg.catalogue.model.Product;
 
 import java.util.List;
-import java.util.UUID;
 
 public class SQLiteProductDao implements ProductDao{
 
@@ -33,23 +33,33 @@ public class SQLiteProductDao implements ProductDao{
     }
 
     @Override
-    public void deleteProduct(UUID id, ProductCategoryEnum categoryEnum) {
-        mDbHelper.deleteProduct(id, categoryEnum);
+    public void deleteProduct(String name, ProductCategoryEnum categoryEnum) {
+        mDbHelper.deleteProduct(name, categoryEnum);
     }
 
     @Override
-    public void updateProduct(UUID id, Product product, ProductCategoryEnum categoryEnum) {
-        mDbHelper.updateProduct(id, product, categoryEnum);
+    public List<Product> getProduct(String name, ProductCategoryEnum categoryEnum) {
+        return mDbHelper.getProduct(name, categoryEnum);
     }
 
     @Override
-    public Product getProduct(UUID id, ProductCategoryEnum categoryEnum) {
-        return mDbHelper.getProduct(id, categoryEnum);
+    public List<Product> findProducts(String namePattern, ProductCategoryEnum categoryEnum) {
+        return mDbHelper.findProducts(namePattern, categoryEnum);
+    }
+
+    @Override
+    public ActiveSubstance getActiveSubstance(long id, ProductCategoryEnum categoryEnum) {
+        return mDbHelper.getActiveSubstance(id, categoryEnum);
     }
 
     @Override
     public List<Product> getAllProducts(ProductCategoryEnum categoryEnum) {
         return  mDbHelper.getProducts(categoryEnum);
+    }
+
+    @Override
+    public List<ActiveSubstance> getAllActiveSubstances(ProductCategoryEnum categoryEnum) {
+        return mDbHelper.getActiveSubstances(categoryEnum);
     }
 
     @Override

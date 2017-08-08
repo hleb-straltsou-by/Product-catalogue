@@ -4,24 +4,17 @@
     <string name="menu_item_search_button_text">Поиск</string>
     <string name="menu_item_contacts_button_text">Контакты</string>
     <string name="action_search">поиск</string>
-    <string name="search_culture_title">Культура, обрабатываемые объекты</string>
-    <string name="search_harmful_organism_disease_title">
-        Вредный организм, заболевание
-    </string>
-    <string name="search_all_names_title">
-        Торговое название, препаративная форма, действующее вещество, фирма
-    </string>
+    <string name="search_culture_title">Культура</string>
+    <string name="search_harmful_organism_disease_title">Вредный организм</string>
+    <string name="search_all_names_title">Торговое название</string>
+    <string name="search_active_substance">Действующее вещество</string>
 
     <!-- Product attributes -->
-    <string name="product_all_names">
-        Торговое название, препаративная форма, действующее вещество, фирма
-    </string>
-    <string name="product_consumption_rate">Норма расхода препарата, л/га, кг/га</string>
-    <string name="product_processed_cultures">Культура, обрабатываемые объекты</string>
-    <string name="product_harmful_organism_and_disease">Вредный организм, заболевание</string>
+    <string name="product_all_names">Торговое название</string>
+    <string name="product_active_substance">Действующее вещество</string>
+    <string name="product_consumption_rate_and_processed_cultures">Культура (норма расхода препарата, л/га, кг/га)</string>
+    <string name="product_harmful_organism_and_disease">Вредный организм</string>
     <string name="product_operating_principle">Способ, время обработки, ограничения</string>
-    <string name="product_days_till_last_harvest">
-        Срок последней обработки (в днях до сбора урожая)
-    </string>
+    <string name="product_days_till_last_harvest">Срок последней обработки</string>
     <string name="product_treatments_multiplicity">Кратность обработок</string>
 </resources>

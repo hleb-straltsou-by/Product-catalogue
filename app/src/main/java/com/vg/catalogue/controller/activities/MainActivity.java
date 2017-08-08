@@ -21,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String KEY_FRAGMENT_CLASS = "fragment_class";
 
+    private static final String KEY_FILTER_PATTERN_NAME = "filter_pattern_name";
+
     private static final int NAVBAR_CATALOG_TAB_POSITION = 0;
 
     private static final int NAVBAR_FULL_SEARCH_TAB_POSITION = 1;
@@ -29,11 +31,21 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int NAVBAR_DEFAULT_TAB_POSITION = 0;
 
+    public static String filterPatternNameParam;
+
     private Fragment mFragment;
 
     public static Intent newIntent(Context context, Class<? extends Fragment> fragmentClass){
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra(KEY_FRAGMENT_CLASS, fragmentClass);
+        return intent;
+    }
+
+    public static Intent newIntent(Context context, Class<? extends Fragment> fragmentClass,
+                                   String filterPatternName){
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.putExtra(KEY_FRAGMENT_CLASS, fragmentClass);
+        filterPatternNameParam = filterPatternName;
         return intent;
     }
 

@@ -47,8 +47,7 @@ public class ProductFragment extends Fragment {
 
         groups = new String[] {
                 getString(R.string.product_all_names),
-                getString(R.string.product_consumption_rate),
-                getString(R.string.product_processed_cultures),
+                getString(R.string.product_consumption_rate_and_processed_cultures),
                 getString(R.string.product_harmful_organism_and_disease),
                 getString(R.string.product_operating_principle),
                 getString(R.string.product_days_till_last_harvest),
@@ -123,9 +122,7 @@ public class ProductFragment extends Fragment {
         // Creating of test product
         mProduct = new Product();
         mProduct.setName("Test name");
-        mProduct.setConsumptionRate("Test consumption rate");
-        mProduct.setCategory("Test category");
-        mProduct.setProcessedCultures("Test processed cultures");
+        mProduct.setConsumptionRateAndProcessedCultures("Test consumption rate and processedCultures");
         mProduct.setAllNames("Test all names");
         mProduct.setHarmfulOrganismOrDisease("Test harmful organism or disease");
         mProduct.setOperatingPrinciple("Test operating principle");
@@ -135,8 +132,7 @@ public class ProductFragment extends Fragment {
         // Attribute values
         String[] values = {
                 mProduct.getAllNames(),
-                mProduct.getConsumptionRate(),
-                mProduct.getProcessedCultures(),
+                mProduct.getConsumptionRateAndProcessedCultures(),
                 mProduct.getHarmfulOrganismOrDisease(),
                 mProduct.getOperatingPrinciple(),
                 String.valueOf(mProduct.getDaysTillLastHarvest()),

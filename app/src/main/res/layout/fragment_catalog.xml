@@ -3,20 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <fragment
-        android:id="@+id/mini_search_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:name="com.vg.catalogue.controller.fragments.MiniSearchFragment"
-        />
-
-    <fragment
-        android:id="@+id/product_list_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:name="com.vg.catalogue.controller.fragments.ProductListFragment"
-        />
+    android:layout_height="match_parent"
+    android:id="@+id/fragment_catalog_container">
 
 </LinearLayout>
