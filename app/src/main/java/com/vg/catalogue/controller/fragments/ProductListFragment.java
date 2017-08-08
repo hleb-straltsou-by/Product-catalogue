@@ -5,17 +5,20 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.vg.catalogue.controller.activities.MainActivity;
-import com.vg.catalogue.dao.implementations.EmbeddedProductDao;
+import com.vg.catalogue.dao.implementations.SQLiteProductDao;
 import com.vg.catalogue.dao.interfaces.ProductDao;
+import com.vg.catalogue.enums.ProductCategoryEnum;
 import com.vg.catalogue.model.Product;
 import com.vg.catalogue.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductListFragment extends Fragment {
@@ -26,9 +29,18 @@ public class ProductListFragment extends Fragment {
 
     private ProductDao mMomentDao;
 
-    public static ProductListFragment newInstance() {
+    private String mFilterPatternName;
+
+    private static final String KEY_FILTER_PATTERN_NAME = "filter_pattern_name";
+
+    private static final String DEFAULT_FILTER_PATTERN_NAME = "%";
+
+    private static final String TAG = "ProductListFragment";
+
+    public static ProductListFragment newInstance(String filterPatternName) {
         // Initializing of bundle for fragment
         Bundle args = new Bundle();
+        args.putString(KEY_FILTER_PATTERN_NAME, filterPatternName);
 
         ProductListFragment fragment = new ProductListFragment();
         fragment.setArguments(args);
@@ -47,15 +59,25 @@ public class ProductListFragment extends Fragment {
         mProductRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // Initialize MomentDao object
-        mMomentDao = EmbeddedProductDao.getInstance();
+        mMomentDao = SQLiteProductDao.getInstance(getActivity().getApplicationContext());
 
-        updateUI();
+        if(savedInstanceState == null){
+            mFilterPatternName = getArguments().getString(KEY_FILTER_PATTERN_NAME,
+                    DEFAULT_FILTER_PATTERN_NAME);
+        } else {
+            mFilterPatternName = savedInstanceState.getString(KEY_FILTER_PATTERN_NAME,
+                    DEFAULT_FILTER_PATTERN_NAME);
+        }
+
+        updateUI(mFilterPatternName);
 
         return view;
     }
 
-    private void updateUI() {
-        List<Product> products = mMomentDao.getAllProducts();
+    private void updateUI(String filterPatternName) {
+        ProductCategoryEnum categoryEnum = ProductCategoryEnum.HERBICIDES;
+        List<Product> products = filterProducts(mMomentDao.findProducts(filterPatternName, categoryEnum));
+        Log.d(TAG, "Count of products after query: " + products.size());
 
         if (mAdapter == null) {
             mAdapter = new ProductAdapter(products);
@@ -69,7 +91,25 @@ public class ProductListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        updateUI();
+        updateUI(mFilterPatternName);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(KEY_FILTER_PATTERN_NAME, mFilterPatternName);
+    }
+
+    private List<Product> filterProducts(List<Product> products){
+        List<Product> resultList = new ArrayList<>();
+        String tempName = "";
+        for(Product product : products){
+            if(!product.getName().equals(tempName)){
+                resultList.add(product);
+                tempName = product.getName();
+            }
+        }
+        return resultList;
     }
 
     private class ProductHolder extends RecyclerView.ViewHolder
