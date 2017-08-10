@@ -1,0 +1,4 @@
+CREATE TABLE IF NOT EXISTS "active_substance_herbicides"(
+    active_substance_id INTEGER PRIMARY KEY NOT NULL,
+    active_substance_name TEXT NOT NULL
+);
