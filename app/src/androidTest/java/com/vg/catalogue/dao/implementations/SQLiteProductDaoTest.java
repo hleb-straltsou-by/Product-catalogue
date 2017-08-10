@@ -8,6 +8,7 @@ import com.vg.catalogue.enums.ProductCategoryEnum;
 import com.vg.catalogue.model.ActiveSubstance;
 import com.vg.catalogue.model.Product;
 
+import org.junit.After;
 import org.junit.Test;
 import java.util.List;
 
@@ -24,10 +25,19 @@ public class SQLiteProductDaoTest {
         mProductDao = SQLiteProductDao.getInstance(appContext);
     }
 
+    @After
+    public void deleteIllegalProducts(){
+        mProductDao.deleteProduct("", ProductCategoryEnum.HERBICIDES);
+    }
+
     @Test
     public void verifyAppContextTest() throws Exception {
         String errorMessage = "Android app context is not initialized";
         assertNotNull(errorMessage , appContext);
+
+        List<Product> products = mProductDao.getAllProducts(
+                ProductCategoryEnum.HERBICIDES);
+        System.out.println(products.size());
     }
 
     @Test
@@ -135,5 +145,54 @@ public class SQLiteProductDaoTest {
                 ProductCategoryEnum.HERBICIDES);
         int expectedSizeOfList = 25;
         assertEquals(errorMessage, expectedSizeOfList, products.size());
+    }
+
+    @Test
+    public void findExistedProductsFromHerbicidesComplexQueryTest() throws Exception {
+        ProductCategoryEnum categoryEnum = ProductCategoryEnum.HERBICIDES;
+        String culture = "пше";
+        String harmfulOrganism = "одно";
+        String allNames = "дрот";
+        int activeSubstanceId = 1;
+
+        String errorMessage = "Size of result list with products doesn't correspond to expected";
+        int expectedListSize = 2;
+        List<Product> resultList = mProductDao.findProducts(culture, harmfulOrganism,
+                allNames, activeSubstanceId, categoryEnum);
+        assertEquals(errorMessage, expectedListSize, resultList.size());
+
+        List<Product> products = mProductDao.getAllProducts(
+                ProductCategoryEnum.HERBICIDES);
+        System.out.println(products.size());
+    }
+
+    @Test
+    public void findExistedProductsFromHerbicidesComplexQueryTestWithNoActionSubstance() throws Exception {
+        ProductCategoryEnum categoryEnum = ProductCategoryEnum.HERBICIDES;
+        String culture = "пше";
+        String harmfulOrganism = "одно";
+        String allNames = "дрот";
+        int activeSubstanceId = 0;
+
+        String errorMessage = "Size of result list with products doesn't correspond to expected";
+        int expectedListSize = 2;
+        List<Product> resultList = mProductDao.findProducts(culture, harmfulOrganism,
+                allNames, activeSubstanceId, categoryEnum);
+        assertEquals(errorMessage, expectedListSize, resultList.size());
+
+        List<Product> products = mProductDao.getAllProducts(
+                ProductCategoryEnum.HERBICIDES);
+        System.out.println(products.size());
+    }
+
+    @Test
+    public void findActiveSubstancesIdsByNameTest() throws Exception {
+        String namePattern = "2-эгэ";
+
+        int[] resultIds = mProductDao.findActiveSubstanceIdsByName(namePattern,
+                ProductCategoryEnum.ACTIVE_SUBSTANCES_HERBICIDES);
+        String errorMessage = "Size of result array with products doesn't correspond to expected";
+        int expectedArraySize = 3;
+        assertEquals(errorMessage, expectedArraySize, resultIds.length);
     }
 }
