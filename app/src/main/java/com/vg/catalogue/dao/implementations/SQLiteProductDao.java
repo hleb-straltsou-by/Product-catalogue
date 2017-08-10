@@ -44,13 +44,30 @@ public class SQLiteProductDao implements ProductDao{
 
     @Override
     public List<Product> findProducts(String namePattern, ProductCategoryEnum categoryEnum) {
-        return mDbHelper.findProducts(namePattern, categoryEnum);
+        return mDbHelper.findProducts(preparePattern(namePattern), categoryEnum);
+    }
+
+    @Override
+    public List<Product> findProducts(String culture, String harmfulOrganism, String allNames,
+                                      int activeSubstanceId, ProductCategoryEnum categoryEnum) {
+        return mDbHelper.findProducts(
+                preparePattern(culture),
+                preparePattern(harmfulOrganism),
+                preparePattern(allNames),
+                activeSubstanceId,
+                categoryEnum);
     }
 
     @Override
     public ActiveSubstance getActiveSubstance(long id, ProductCategoryEnum categoryEnum) {
         return mDbHelper.getActiveSubstance(id, categoryEnum);
     }
+
+    @Override
+    public int[] findActiveSubstanceIdsByName(String name, ProductCategoryEnum categoryEnum){
+        return mDbHelper.findActiveSubstanceIdsByName(preparePattern(name), categoryEnum);
+    }
+
 
     @Override
     public List<Product> getAllProducts(ProductCategoryEnum categoryEnum) {
@@ -65,5 +82,17 @@ public class SQLiteProductDao implements ProductDao{
     @Override
     public void deleteAllProducts(ProductCategoryEnum categoryEnum) {
         mDbHelper.deleteAllProducts(categoryEnum);
+    }
+
+    private String preparePattern(String pattern){
+        if(pattern == null){
+            pattern = "%";
+        }
+        else if(pattern.equals("")){
+            pattern = "%";
+        } else {
+            pattern = "%" + pattern + "%";
+        }
+        return pattern;
     }
 }
