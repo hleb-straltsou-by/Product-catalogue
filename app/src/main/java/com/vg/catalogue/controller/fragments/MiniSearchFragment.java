@@ -49,6 +49,17 @@ public class MiniSearchFragment extends Fragment {
             }
         });
 
+        mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                String filterPatternName = mSearchView.getQuery().toString();
+                Intent intent = MainActivity.newIntent(getActivity(), CatalogFragment.class,
+                        filterPatternName);
+                startActivity(intent);
+                return true;
+            }
+        });
+
         return v;
     }
 }
