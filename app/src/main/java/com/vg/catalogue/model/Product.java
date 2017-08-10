@@ -4,9 +4,9 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import java.util.UUID;
+import java.io.Serializable;
 
-public class Product {
+public class Product implements Serializable{
 
     private String mName;
 
@@ -133,5 +133,17 @@ public class Product {
                 .toHashCode();
     }
 
-
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("mName", mName)
+                .append("mAllNames", mAllNames)
+                .append("mConsumptionRateAndProcessedCultures", mConsumptionRateAndProcessedCultures)
+                .append("mHarmfulOrganismOrDisease", mHarmfulOrganismOrDisease)
+                .append("mOperatingPrinciple", mOperatingPrinciple)
+                .append("mDaysTillLastHarvest", mDaysTillLastHarvest)
+                .append("mTreatmentsMultiplicity", mTreatmentsMultiplicity)
+                .append("mActiveSubstanceId", mActiveSubstanceId)
+                .toString();
+    }
 }
