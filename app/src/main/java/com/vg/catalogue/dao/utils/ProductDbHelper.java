@@ -23,7 +23,7 @@ import java.util.List;
 public class ProductDbHelper extends SQLiteOpenHelper {
 
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 37;
+    public static final int DATABASE_VERSION = 40;
 
     public static final String DATABASE_NAME = "product.catalogue.db";
 
@@ -75,7 +75,7 @@ public class ProductDbHelper extends SQLiteOpenHelper {
         // Define 'where' part of query.
         String selection = ProductEntry.COLUMN_NAME_NAME + " = ?";
         // Specify arguments in placeholder order.
-        String[] selectionArgs = { name };
+        String[] selectionArgs = { name.toLowerCase() };
         // Issue SQL statement.
         mDatabase.delete(categoryEnum.getTableName(), selection, selectionArgs);
 
@@ -100,7 +100,7 @@ public class ProductDbHelper extends SQLiteOpenHelper {
 
     public List<Product> getProduct(String name, ProductCategoryEnum categoryEnum){
         String whereClause = ProductEntry.COLUMN_NAME_NAME + " = ?";
-        String whereArgs[] = { name };
+        String whereArgs[] = { name.toLowerCase() };
         ProductCursorWrapper cursor = queryProducts(whereClause, whereArgs, categoryEnum);
         List<Product> products = parseProducts(cursor);
         if(products.size() == 0){
@@ -110,11 +110,11 @@ public class ProductDbHelper extends SQLiteOpenHelper {
     }
 
     public List<Product> findProducts(String patternName, ProductCategoryEnum categoryEnum){
-        String whereClause = "UPPER(" + ProductEntry.COLUMN_NAME_NAME + ") LIKE ? ";
+        String whereClause = "LOWER(" + ProductEntry.COLUMN_NAME_NAME + ") LIKE ?";
         if(patternName == null || patternName.equals("")){
             patternName = "%";
         } else {
-            patternName = "%" + patternName.toUpperCase() + "%";
+            patternName = "%" + patternName.toLowerCase() + "%";
         }
         String whereArgs[] = { patternName };
         ProductCursorWrapper cursor = queryProducts(whereClause, whereArgs, categoryEnum);
@@ -124,20 +124,20 @@ public class ProductDbHelper extends SQLiteOpenHelper {
     public List<Product> findProducts(String culture, String harmfulOrganism, String allNames,
                                       int activeSubstanceId, ProductCategoryEnum categoryEnum) {
         String whereClause;
-        String whereArgs[] = {culture, harmfulOrganism, allNames};
+        String whereArgs[] = {culture.toLowerCase(), harmfulOrganism.toLowerCase(), allNames.toLowerCase()};
         if(activeSubstanceId != 0) {
-            whereClause = "UPPER(" + ProductEntry.COLUMN_NAME_CONSUMPTION_RATE_AND_PROCESSED_CULTURES
-                            + ") LIKE UPPER(?) AND " +
+            whereClause = "LOWER(" + ProductEntry.COLUMN_NAME_CONSUMPTION_RATE_AND_PROCESSED_CULTURES
+                            + ") LIKE LOWER(?) AND " +
                             "UPPER(" + ProductEntry.COLUMN_NAME_HARMFUL_ORGANISM_DISEASE +
-                            ") LIKE UPPER(?) AND UPPER(" + ProductEntry.COLUMN_NAME_ALL_NAMES +
-                            ") LIKE UPPER(?) AND " + ActiveSubstanceEntry.COLUMN_NAME_ENTRY_ID +
+                            ") LIKE LOWER(?) AND LOWER(" + ProductEntry.COLUMN_NAME_ALL_NAMES +
+                            ") LIKE LOWER(?) AND " + ActiveSubstanceEntry.COLUMN_NAME_ENTRY_ID +
                             " = " + activeSubstanceId;
         } else {
-            whereClause = "UPPER(" + ProductEntry.COLUMN_NAME_CONSUMPTION_RATE_AND_PROCESSED_CULTURES
-                    + ") LIKE UPPER(?) AND " +
+            whereClause = "LOWER(" + ProductEntry.COLUMN_NAME_CONSUMPTION_RATE_AND_PROCESSED_CULTURES
+                    + ") LIKE LOWER(?) AND " +
                     "UPPER(" + ProductEntry.COLUMN_NAME_HARMFUL_ORGANISM_DISEASE +
-                    ") LIKE UPPER(?) AND UPPER(" + ProductEntry.COLUMN_NAME_ALL_NAMES +
-                    ") LIKE UPPER(?)";
+                    ") LIKE LOWER(?) AND LOWER(" + ProductEntry.COLUMN_NAME_ALL_NAMES +
+                    ") LIKE LOWER(?) ";
 
         }
         ProductCursorWrapper cursor = queryProducts(whereClause, whereArgs, categoryEnum);
@@ -163,8 +163,8 @@ public class ProductDbHelper extends SQLiteOpenHelper {
             return new int[]{0};
         }
         String sql = "SELECT * from " + categoryEnum.getTableName() +
-                " WHERE UPPER(" + ActiveSubstanceEntry.COLUMN_NAME_ACTIVE_SUBSTANCE_NAME + ") " +
-                "LIKE UPPER(\"" + name + "\")";
+                " WHERE LOWER(" + ActiveSubstanceEntry.COLUMN_NAME_ACTIVE_SUBSTANCE_NAME + ") " +
+                "LIKE LOWER(\"" + name.toLowerCase() + "\")";
 
         List<ActiveSubstance> substances =
                 parseActiveSubstances(new ActiveSubstanceCursorWrapper(
@@ -187,15 +187,20 @@ public class ProductDbHelper extends SQLiteOpenHelper {
 
     private ContentValues getContentValues(Product product){
         ContentValues values = new ContentValues();
-        values.put(ProductEntry.COLUMN_NAME_NAME, product.getName());
-        values.put(ProductEntry.COLUMN_NAME_ALL_NAMES, product.getAllNames());
+        values.put(ProductEntry.COLUMN_NAME_NAME, product.getName().toLowerCase());
+        values.put(ProductEntry.COLUMN_NAME_ALL_NAMES, product.getAllNames().toLowerCase());
         values.put(ProductEntry.COLUMN_NAME_CONSUMPTION_RATE_AND_PROCESSED_CULTURES,
-                product.getConsumptionRateAndProcessedCultures());
-        values.put(ProductEntry.COLUMN_NAME_HARMFUL_ORGANISM_DISEASE, product.getHarmfulOrganismOrDisease());
-        values.put(ProductEntry.COLUMN_NAME_OPERATING_PRINCIPLE, product.getOperatingPrinciple());
-        values.put(ProductEntry.COLUMN_NAME_DAYS_TILL_LAST_HARVEST, product.getDaysTillLastHarvest());
-        values.put(ProductEntry.COLUMN_NAME_TREATMENTS_MULTIPLICITY, product.getTreatmentsMultiplicity());
-        values.put(ProductEntry.COLUMN_NAME_ACTIVE_SUBSTANCE_ID, product.getActiveSubstanceId());
+                product.getConsumptionRateAndProcessedCultures().toLowerCase());
+        values.put(ProductEntry.COLUMN_NAME_HARMFUL_ORGANISM_DISEASE,
+                product.getHarmfulOrganismOrDisease().toLowerCase());
+        values.put(ProductEntry.COLUMN_NAME_OPERATING_PRINCIPLE,
+                product.getOperatingPrinciple().toLowerCase());
+        values.put(ProductEntry.COLUMN_NAME_DAYS_TILL_LAST_HARVEST,
+                product.getDaysTillLastHarvest());
+        values.put(ProductEntry.COLUMN_NAME_TREATMENTS_MULTIPLICITY,
+                product.getTreatmentsMultiplicity());
+        values.put(ProductEntry.COLUMN_NAME_ACTIVE_SUBSTANCE_ID,
+                product.getActiveSubstanceId());
 
         return values;
     }
@@ -289,7 +294,7 @@ public class ProductDbHelper extends SQLiteOpenHelper {
             while (insertReader.ready()) {
                 insertStmt.append(insertReader.readLine());
             }
-            String insertScript = insertStmt.toString();
+            String insertScript = insertStmt.toString().toLowerCase();
             db.execSQL(insertScript);
             insertReader.close();
         } catch (IOException e) {
