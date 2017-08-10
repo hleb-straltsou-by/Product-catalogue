@@ -3,7 +3,7 @@
     <string name="menu_item_catalog_button_text">Каталог</string>
     <string name="menu_item_search_button_text">Поиск</string>
     <string name="menu_item_contacts_button_text">Контакты</string>
-    <string name="action_search">поиск</string>
+    <string name="action_search">Поиск</string>
     <string name="search_culture_title">Культура</string>
     <string name="search_harmful_organism_disease_title">Вредный организм</string>
     <string name="search_all_names_title">Торговое название</string>
@@ -14,7 +14,7 @@
     <!-- Product attributes -->
     <string name="product_all_names">Торговое название</string>
     <string name="product_active_substance">Действующее вещество</string>
-    <string name="product_processed_cultures">Культуры</string>
+    <string name="product_processed_cultures">Культуры:</string>
     <string name="product_consumption_rate">Норма расхода препарата (л/га, кг/га)</string>
     <string name="product_consumption_rate_and_processed_cultures">Культура (норма расхода препарата, л/га, кг/га)</string>
     <string name="product_harmful_organism_and_disease">Вредный организм</string>

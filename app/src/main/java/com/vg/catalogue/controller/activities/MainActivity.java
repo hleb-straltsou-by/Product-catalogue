@@ -2,6 +2,7 @@ package com.vg.catalogue.controller.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
@@ -115,6 +116,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     private int defineTabPosition(){

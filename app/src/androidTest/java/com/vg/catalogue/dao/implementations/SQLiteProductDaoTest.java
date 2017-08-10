@@ -54,7 +54,7 @@ public class SQLiteProductDaoTest {
     @Test
     public void addProductToHerbicidesTest() throws Exception {
         Product product = new Product();
-        product.setName("Test name");
+        product.setName("test name");
         product.setActiveSubstanceId(1);
 
         ProductCategoryEnum categoryEnum = ProductCategoryEnum.HERBICIDES;
@@ -74,7 +74,7 @@ public class SQLiteProductDaoTest {
         ProductCategoryEnum categoryEnum = ProductCategoryEnum.HERBICIDES;
 
         mProductDao.addProduct(product, categoryEnum);
-        product.setName("Test name");
+        product.setName("test name");
 
         mProductDao.deleteProduct(product.getName(), categoryEnum);
         String errorMessage = "After deleting product object however the same object exists in storage";
@@ -186,6 +186,25 @@ public class SQLiteProductDaoTest {
     }
 
     @Test
+    public void findExistedProductsFromHerbicidesTestWithTest() throws Exception {
+        ProductCategoryEnum categoryEnum = ProductCategoryEnum.HERBICIDES;
+        String culture = "пше";
+        String harmfulOrganism = "";
+        String allNames = "";
+        int activeSubstanceId = 0;
+
+        String errorMessage = "Size of result list with products doesn't correspond to expected";
+        int expectedListSize = 11;
+        List<Product> resultList = mProductDao.findProducts(culture, harmfulOrganism,
+                allNames, activeSubstanceId, categoryEnum);
+        assertEquals(errorMessage, expectedListSize, resultList.size());
+
+        List<Product> products = mProductDao.getAllProducts(
+                ProductCategoryEnum.HERBICIDES);
+        System.out.println(products.size());
+    }
+
+    @Test
     public void findActiveSubstancesIdsByNameTest() throws Exception {
         String namePattern = "2-эгэ";
 
@@ -195,4 +214,6 @@ public class SQLiteProductDaoTest {
         int expectedArraySize = 3;
         assertEquals(errorMessage, expectedArraySize, resultIds.length);
     }
+
+
 }
