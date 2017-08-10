@@ -93,7 +93,8 @@ public class ProductFragment extends Fragment {
         mExpandableListView.setAdapter(adapter);
 
         // config culture group
-        Drawable expandableViewBackground = getResources().getDrawable(R.drawable.background_product_view);
+        Drawable expandableViewBackground = getResources().
+                getDrawable(R.color.colorProductDetailsBackground);
         mExpandableListView.setBackground(expandableViewBackground);
         mExpandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
@@ -228,8 +229,8 @@ public class ProductFragment extends Fragment {
 
     @NonNull
     private String parseConsumptionRate(String value){
-        int beginPos = value.indexOf("(");
-        int endPos = value.indexOf(")");
+        int beginPos = value.lastIndexOf("(");
+        int endPos = value.lastIndexOf(")");
         return value.substring(beginPos+1, endPos);
     }
 }
