@@ -1,0 +1,11 @@
+CREATE TABLE IF NOT EXISTS "herbicides"(
+    name TEXT NOT NULL,
+    all_names TEXT NOT NULL,
+    consumption_rate_and_processed_cultures TEXT NOT NULL,
+    harmful_organism_disease TEXT NOT NULL,
+    operating_principle TEXT NOT NULL,
+    days_till_last_harvest INTEGER NOT NULL,
+    treatments_multiplicity INTEGER NOT NULL,
+    active_substance_id INTEGER NOT NULL,
+    FOREIGN KEY(active_substance_id) REFERENCES herbicides_active_substances(active_substance_id)
+);

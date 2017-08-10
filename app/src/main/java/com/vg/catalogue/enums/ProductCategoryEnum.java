@@ -10,6 +10,7 @@ public enum ProductCategoryEnum {
         {
             tableName = ProductEntry.TABLE_NAME_HERBICIDES;
             initialDataScriptId = R.raw.herbicides_initial_data_sql_script;
+            tableScriptId = R.raw.herbicides_table_sql_script;
         }
     }, FUNGICIDES {
         {
@@ -31,6 +32,7 @@ public enum ProductCategoryEnum {
         {
             tableName = ActiveSubstanceEntry.TABLE_NAME_HERBICIDES;
             initialDataScriptId = R.raw.active_substance_herbicides_initial_data_sql_script;
+            tableScriptId = R.raw.active_substances_herbicides_table_sql_script;
         }
     }, ACTIVE_SUBSTANCES_FUNGICIDES {
         {
@@ -52,6 +54,8 @@ public enum ProductCategoryEnum {
 
     String tableName;
 
+    int tableScriptId;
+
     int initialDataScriptId;
 
     public String getTableName(){
@@ -60,5 +64,9 @@ public enum ProductCategoryEnum {
 
     public int getInitialDataScriptId(){
         return initialDataScriptId;
+    }
+
+    public int getTableScriptId(){
+        return tableScriptId;
     }
 }

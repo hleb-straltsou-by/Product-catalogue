@@ -15,7 +15,12 @@ public interface ProductDao {
 
     List<Product> findProducts(String namePattern, ProductCategoryEnum categoryEnum);
 
+    List<Product> findProducts(String culture, String harmfulOrganism, String allNames,
+                               int activeSubstanceId , ProductCategoryEnum categoryEnum);
+
     ActiveSubstance getActiveSubstance(long id, ProductCategoryEnum categoryEnum);
+
+    int[] findActiveSubstanceIdsByName(String name, ProductCategoryEnum categoryEnum);
 
     List<Product> getAllProducts(ProductCategoryEnum categoryEnum);
 

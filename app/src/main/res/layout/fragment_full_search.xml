@@ -26,7 +26,7 @@
         style="?android:listSeparatorTextViewStyle"/>
 
     <EditText
-        android:id="@+id/search_all_names_edit_text"
+        android:id="@+id/search_harmful_organism_disease_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
@@ -39,7 +39,7 @@
         style="?android:listSeparatorTextViewStyle"/>
 
     <EditText
-        android:id="@+id/search_harmful_organism_disease_edit_text"
+        android:id="@+id/search_all_names_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
