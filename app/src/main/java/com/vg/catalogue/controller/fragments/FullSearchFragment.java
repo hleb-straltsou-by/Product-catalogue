@@ -1,11 +1,13 @@
 package com.vg.catalogue.controller.fragments;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -21,8 +23,6 @@ public class FullSearchFragment extends Fragment {
     private EditText mAllNamesEditText;
 
     private EditText mActiveSubstanceEditText;
-
-    private ImageButton mSearchImageButton;
 
     public static String culture = "";
 
@@ -46,8 +46,8 @@ public class FullSearchFragment extends Fragment {
 
         mActiveSubstanceEditText = (EditText) v.findViewById(R.id.search_active_substance);
 
-        mSearchImageButton = (ImageButton) v.findViewById(R.id.search_image_button);
-        mSearchImageButton.setOnClickListener(new View.OnClickListener(){
+        Button searchButton = (Button) v.findViewById(R.id.search_image_button);
+        searchButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 culture = mCultureEditText.getText().toString();
