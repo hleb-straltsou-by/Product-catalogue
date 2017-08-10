@@ -23,11 +23,9 @@ import java.util.List;
 public class ProductDbHelper extends SQLiteOpenHelper {
 
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 25;
+    public static final int DATABASE_VERSION = 37;
 
     public static final String DATABASE_NAME = "product.catalogue.db";
-
-    private static ProductDbHelper INSTANCE;
 
     private SQLiteDatabase mDatabase;
 
@@ -36,10 +34,7 @@ public class ProductDbHelper extends SQLiteOpenHelper {
     private String TAG = "PPODUCT_DB_HELPER";
 
     public static ProductDbHelper getInstance(Context context){
-        if(INSTANCE == null){
-            INSTANCE = new ProductDbHelper(context.getApplicationContext());
-        }
-        return INSTANCE;
+        return new ProductDbHelper(context.getApplicationContext());
     }
 
     private ProductDbHelper(Context context) {
@@ -49,16 +44,12 @@ public class ProductDbHelper extends SQLiteOpenHelper {
     }
 
     public void onCreate(SQLiteDatabase db) {
-        // creating of active_substances_herbicides table
-        createActiveSubstanceTable(db, ProductCategoryEnum.ACTIVE_SUBSTANCES_HERBICIDES);
+        // creating of active_substances_herbicides_table_sql_script
+        createTables(db, ProductCategoryEnum.ACTIVE_SUBSTANCES_HERBICIDES);
+        createTables(db, ProductCategoryEnum.HERBICIDES);
 
-        // filling active_substances_herbicides table with data
+        // filling active_substances_herbicides_table_sql_script with data
         insertInitialData(db, ProductCategoryEnum.ACTIVE_SUBSTANCES_HERBICIDES);
-
-        // creating of herbicides table
-        createProductTable(db, ProductCategoryEnum.HERBICIDES);
-
-        // filling active_substances_herbicides table with data
         insertInitialData(db, ProductCategoryEnum.HERBICIDES);
     }
 
@@ -119,11 +110,42 @@ public class ProductDbHelper extends SQLiteOpenHelper {
     }
 
     public List<Product> findProducts(String patternName, ProductCategoryEnum categoryEnum){
-        String whereClause = ProductEntry.COLUMN_NAME_NAME + " LIKE ? COLLATE NOCASE";
-        patternName = "%" + patternName + "%";
+        String whereClause = "UPPER(" + ProductEntry.COLUMN_NAME_NAME + ") LIKE ? ";
+        if(patternName == null || patternName.equals("")){
+            patternName = "%";
+        } else {
+            patternName = "%" + patternName.toUpperCase() + "%";
+        }
         String whereArgs[] = { patternName };
         ProductCursorWrapper cursor = queryProducts(whereClause, whereArgs, categoryEnum);
         return parseProducts(cursor);
+    }
+
+    public List<Product> findProducts(String culture, String harmfulOrganism, String allNames,
+                                      int activeSubstanceId, ProductCategoryEnum categoryEnum) {
+        String whereClause;
+        String whereArgs[] = {culture, harmfulOrganism, allNames};
+        if(activeSubstanceId != 0) {
+            whereClause = "UPPER(" + ProductEntry.COLUMN_NAME_CONSUMPTION_RATE_AND_PROCESSED_CULTURES
+                            + ") LIKE UPPER(?) AND " +
+                            "UPPER(" + ProductEntry.COLUMN_NAME_HARMFUL_ORGANISM_DISEASE +
+                            ") LIKE UPPER(?) AND UPPER(" + ProductEntry.COLUMN_NAME_ALL_NAMES +
+                            ") LIKE UPPER(?) AND " + ActiveSubstanceEntry.COLUMN_NAME_ENTRY_ID +
+                            " = " + activeSubstanceId;
+        } else {
+            whereClause = "UPPER(" + ProductEntry.COLUMN_NAME_CONSUMPTION_RATE_AND_PROCESSED_CULTURES
+                    + ") LIKE UPPER(?) AND " +
+                    "UPPER(" + ProductEntry.COLUMN_NAME_HARMFUL_ORGANISM_DISEASE +
+                    ") LIKE UPPER(?) AND UPPER(" + ProductEntry.COLUMN_NAME_ALL_NAMES +
+                    ") LIKE UPPER(?)";
+
+        }
+        ProductCursorWrapper cursor = queryProducts(whereClause, whereArgs, categoryEnum);
+        List<Product> products = parseProducts(cursor);
+        if(products.size() == 0){
+            products.add(new Product());
+        }
+        return products;
     }
 
     public List<Product> getProducts(ProductCategoryEnum categoryEnum) {
@@ -134,6 +156,27 @@ public class ProductDbHelper extends SQLiteOpenHelper {
     public List<ActiveSubstance> getActiveSubstances(ProductCategoryEnum categoryEnum) {
         ActiveSubstanceCursorWrapper cursor = queryActiveSubstances(null, null, categoryEnum);
         return parseActiveSubstances(cursor);
+    }
+
+    public int[] findActiveSubstanceIdsByName(String name, ProductCategoryEnum categoryEnum){
+        if(name.equals("%")){
+            return new int[]{0};
+        }
+        String sql = "SELECT * from " + categoryEnum.getTableName() +
+                " WHERE UPPER(" + ActiveSubstanceEntry.COLUMN_NAME_ACTIVE_SUBSTANCE_NAME + ") " +
+                "LIKE UPPER(\"" + name + "\")";
+
+        List<ActiveSubstance> substances =
+                parseActiveSubstances(new ActiveSubstanceCursorWrapper(
+                        mDatabase.rawQuery(sql, null)));
+        int[] correspondIds = new int[substances.size()];
+        for(int i = 0 ; i < substances.size(); i++){
+            correspondIds[i] = (int)substances.get(i).getId();
+        }
+        if(correspondIds.length == 0){
+            return new int[]{0};
+        }
+        return correspondIds;
     }
 
     private ProductCursorWrapper queryProducts(String whereClause, String[] whereArgs,
@@ -212,26 +255,25 @@ public class ProductDbHelper extends SQLiteOpenHelper {
         );
     }
 
-    private void createActiveSubstanceTable(SQLiteDatabase db, ProductCategoryEnum categoryEnum){
-        db.execSQL("CREATE TABLE " + categoryEnum.getTableName() + " (" +
-                ActiveSubstanceEntry.COLUMN_NAME_ENTRY_ID + " INTEGER , " +
-                ActiveSubstanceEntry.COLUMN_NAME_ACTIVE_SUBSTANCE_NAME + " TEXT " +
-                " )");
-    }
+    private void createTables(SQLiteDatabase db, ProductCategoryEnum categoryEnum){
+        BufferedReader reader;
+        try {
+            // Open the resource
+            InputStream insertsStream = mContext.getResources().
+                    openRawResource(categoryEnum.getTableScriptId());
+            reader = new BufferedReader(new InputStreamReader(insertsStream));
 
-    private void createProductTable(SQLiteDatabase db, ProductCategoryEnum categoryEnum){
-        db.execSQL("CREATE TABLE " + categoryEnum.getTableName() + " (" +
-                ProductEntry.COLUMN_NAME_NAME + " TEXT, " +
-                ProductEntry.COLUMN_NAME_ALL_NAMES + " TEXT, " +
-                ProductEntry.COLUMN_NAME_CONSUMPTION_RATE_AND_PROCESSED_CULTURES + " TEXT, " +
-                ProductEntry.COLUMN_NAME_HARMFUL_ORGANISM_DISEASE + " TEXT, " +
-                ProductEntry.COLUMN_NAME_OPERATING_PRINCIPLE + " TEXT, " +
-                ProductEntry.COLUMN_NAME_DAYS_TILL_LAST_HARVEST + " INTEGER, " +
-                ProductEntry.COLUMN_NAME_TREATMENTS_MULTIPLICITY + " INTEGER, " +
-                ProductEntry.COLUMN_NAME_ACTIVE_SUBSTANCE_ID + " INTEGER, " +
-                "FOREIGN KEY(" + ProductEntry.COLUMN_NAME_ACTIVE_SUBSTANCE_ID + ") REFERENCES " +
-                ActiveSubstanceEntry.TABLE_NAME_HERBICIDES + "(" + ActiveSubstanceEntry.COLUMN_NAME_ENTRY_ID + ")" +
-                " )");
+            // Iterate through lines
+            StringBuilder insertStmt = new StringBuilder();
+            while (reader.ready()) {
+                insertStmt.append(reader.readLine());
+            }
+            String insertScript = insertStmt.toString();
+            db.execSQL(insertScript);
+            reader.close();
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage());
+        }
     }
 
     private void insertInitialData(SQLiteDatabase db, ProductCategoryEnum categoryEnum){
@@ -242,7 +284,7 @@ public class ProductDbHelper extends SQLiteOpenHelper {
                     openRawResource(categoryEnum.getInitialDataScriptId());
             insertReader = new BufferedReader(new InputStreamReader(insertsStream));
 
-            // Iterate through lines (assuming each insert has its own line and theres no other stuff)
+            // Iterate through lines
             StringBuilder insertStmt = new StringBuilder();
             while (insertReader.ready()) {
                 insertStmt.append(insertReader.readLine());
