@@ -58,7 +58,7 @@ public class ProductFragment extends Fragment {
         mProduct = (Product) getActivity().getIntent().getSerializableExtra(KEY_SELECTED_PRODUCT);
 
         List<Product> products = mProductDao.getProduct(mProduct.getName(),
-                ProductCategoryEnum.HERBICIDES);
+                getCurrentProductCategory());
 
         initializeGroupsForExpandableListView(products);
 
@@ -92,10 +92,8 @@ public class ProductFragment extends Fragment {
                 R.id.product_expandable_list_view);
         mExpandableListView.setAdapter(adapter);
 
-        // config culture group
-        Drawable expandableViewBackground = getResources().
-                getDrawable(R.color.colorProductDetailsBackground);
-        mExpandableListView.setBackground(expandableViewBackground);
+        mExpandableListView.setGroupIndicator(getResources()
+                .getDrawable(R.drawable.ic_product_group));
         mExpandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
                 if(groupPosition == 1) {
@@ -176,7 +174,7 @@ public class ProductFragment extends Fragment {
         // Get value of active substance
         long activeSubstanceId = products.get(0).getActiveSubstanceId();
         ActiveSubstance substance = mProductDao.getActiveSubstance(activeSubstanceId,
-                ProductCategoryEnum.ACTIVE_SUBSTANCES_HERBICIDES);
+                getCurrentProductCategory());
 
         // create view of all cultures of product
         String[] values = new String[products.size()];
@@ -232,5 +230,9 @@ public class ProductFragment extends Fragment {
         int beginPos = value.lastIndexOf("(");
         int endPos = value.lastIndexOf(")");
         return value.substring(beginPos+1, endPos);
+    }
+
+    private ProductCategoryEnum getCurrentProductCategory(){
+        return ProductCategoryEnum.HERBICIDES;
     }
 }
