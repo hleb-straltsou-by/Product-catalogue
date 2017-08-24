@@ -31,18 +31,26 @@ public class ProductListFragment extends Fragment {
 
     private String mFilterPatternName;
 
+    private ProductCategoryEnum mCategory;
+
     private static final String KEY_FILTER_PATTERN_NAME = "filter_pattern_name";
 
+    private static final String KEY_PRODUCT_CATEGORY = "product_category";
+
     private static final String DEFAULT_FILTER_PATTERN_NAME = "%";
+
+    private static ProductCategoryEnum DEFAULT_PRODUCT_CATEGORY = ProductCategoryEnum.HERBICIDES;
 
     private static final String TAG = "ProductListFragment";
 
     public static boolean isFullSearchPerform = false;
 
-    public static ProductListFragment newInstance(String filterPatternName) {
+    public static ProductListFragment newInstance(String filterPatternName,
+                                                  ProductCategoryEnum category) {
         // Initializing of bundle for fragment
         Bundle args = new Bundle();
         args.putString(KEY_FILTER_PATTERN_NAME, filterPatternName);
+        args.putSerializable(KEY_PRODUCT_CATEGORY, category);
 
         ProductListFragment fragment = new ProductListFragment();
         fragment.setArguments(args);
@@ -66,9 +74,13 @@ public class ProductListFragment extends Fragment {
         if (savedInstanceState == null) {
             mFilterPatternName = getArguments().getString(KEY_FILTER_PATTERN_NAME,
                     DEFAULT_FILTER_PATTERN_NAME);
+            mCategory = (ProductCategoryEnum) getArguments()
+                    .getSerializable(KEY_PRODUCT_CATEGORY);
         } else {
             mFilterPatternName = savedInstanceState.getString(KEY_FILTER_PATTERN_NAME,
                     DEFAULT_FILTER_PATTERN_NAME);
+            mCategory = (ProductCategoryEnum) getArguments()
+                    .getSerializable(KEY_PRODUCT_CATEGORY);
         }
 
         return view;
@@ -79,8 +91,9 @@ public class ProductListFragment extends Fragment {
     }
 
     private void updateUI(String filterPatternName) {
-        ProductCategoryEnum categoryEnum = ProductCategoryEnum.HERBICIDES;
-        List<Product> products = filterProducts(mProductDao.findProducts(filterPatternName, categoryEnum));
+        ProductCategoryEnum category = getCurrentCategory();
+        List<Product> products = filterProducts(
+                mProductDao.findProducts(filterPatternName, category));
         Log.d(TAG, "Count of products after query: " + products.size());
 
         if (mAdapter == null) {
@@ -93,17 +106,11 @@ public class ProductListFragment extends Fragment {
     }
 
     private void updateUI(String culture, String harmfulOrganism, String allNames,
-                          String activeSubstance){
-        ProductCategoryEnum categoryEnum = ProductCategoryEnum.HERBICIDES;
+                          String activeSubstance, ProductCategoryEnum category){
 
-        int[] activeSubstancesIds = mProductDao.findActiveSubstanceIdsByName(
-                activeSubstance, ProductCategoryEnum.ACTIVE_SUBSTANCES_HERBICIDES);
+        List<Product> products = mProductDao.findProducts(culture, harmfulOrganism,
+                allNames, activeSubstance, category);
 
-        List<Product> products = new ArrayList<>();
-        for(int i = 0; i < activeSubstancesIds.length; i++){
-            products.addAll(mProductDao.findProducts(culture, harmfulOrganism,
-                    allNames, activeSubstancesIds[i], categoryEnum));
-        }
         products = filterProducts(products);
         Log.d(TAG, "Count of products after query: " + products.size());
 
@@ -126,11 +133,8 @@ public class ProductListFragment extends Fragment {
         super.onResume();
         if(isFullSearchPerform){
             updateUI(FullSearchFragment.culture, FullSearchFragment.harmfulOrganism,
-                    FullSearchFragment.allNames, FullSearchFragment.activeSubstance);
-            FullSearchFragment.culture = "";
-            FullSearchFragment.harmfulOrganism = "";
-            FullSearchFragment.allNames = "";
-            FullSearchFragment.activeSubstance = "";
+                    FullSearchFragment.allNames, FullSearchFragment.activeSubstance,
+                    FullSearchFragment.category);
             setFullSearchPerformed(false);
 
         } else {
@@ -160,6 +164,14 @@ public class ProductListFragment extends Fragment {
 
     private void deleteIllegalProducts(){
         mProductDao.deleteProduct("", ProductCategoryEnum.HERBICIDES);
+    }
+
+    private ProductCategoryEnum getCurrentCategory(){
+        ProductCategoryEnum category = DEFAULT_PRODUCT_CATEGORY;
+        if(mCategory != null){
+            category = mCategory;
+        }
+        return category;
     }
 
     private class ProductHolder extends RecyclerView.ViewHolder

@@ -1,6 +1,6 @@
 package com.vg.catalogue.dao.entries;
 
-public class ActiveSubstanceEntry {
+public abstract class ActiveSubstanceEntry {
 
     public static final String TABLE_NAME_HERBICIDES = "active_substance_herbicides";
 

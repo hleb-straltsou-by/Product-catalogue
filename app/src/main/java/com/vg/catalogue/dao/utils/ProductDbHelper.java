@@ -23,7 +23,7 @@ import java.util.List;
 public class ProductDbHelper extends SQLiteOpenHelper {
 
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 40;
+    public static final int DATABASE_VERSION = 42;
 
     public static final String DATABASE_NAME = "product.catalogue.db";
 
@@ -44,13 +44,13 @@ public class ProductDbHelper extends SQLiteOpenHelper {
     }
 
     public void onCreate(SQLiteDatabase db) {
-        // creating of active_substances_herbicides_table_sql_script
-        createTables(db, ProductCategoryEnum.ACTIVE_SUBSTANCES_HERBICIDES);
-        createTables(db, ProductCategoryEnum.HERBICIDES);
+        ProductCategoryEnum[] categories = ProductCategoryEnum.values();
 
-        // filling active_substances_herbicides_table_sql_script with data
-        insertInitialData(db, ProductCategoryEnum.ACTIVE_SUBSTANCES_HERBICIDES);
-        insertInitialData(db, ProductCategoryEnum.HERBICIDES);
+        // init of tables and data in all categories
+//        for(ProductCategoryEnum category : categories){
+//            createCategoryTablesAndInitData(db, category);
+//        }
+        createCategoryTablesAndInitData(db, ProductCategoryEnum.HERBICIDES);
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -90,7 +90,8 @@ public class ProductDbHelper extends SQLiteOpenHelper {
     public ActiveSubstance getActiveSubstance(long id, ProductCategoryEnum categoryEnum){
         String whereClause = ActiveSubstanceEntry.COLUMN_NAME_ENTRY_ID + " = ?";
         String whereArgs[] = {String.valueOf(id)};
-        ActiveSubstanceCursorWrapper cursor = queryActiveSubstances(whereClause, whereArgs, categoryEnum);
+        ActiveSubstanceCursorWrapper cursor = queryActiveSubstances(
+                whereClause, whereArgs, categoryEnum);
         List<ActiveSubstance> substances = parseActiveSubstances(cursor);
         if(substances.size() == 0){
             return new ActiveSubstance();
@@ -100,7 +101,7 @@ public class ProductDbHelper extends SQLiteOpenHelper {
 
     public List<Product> getProduct(String name, ProductCategoryEnum categoryEnum){
         String whereClause = ProductEntry.COLUMN_NAME_NAME + " = ?";
-        String whereArgs[] = { name.toLowerCase() };
+        String whereArgs[] = { name.toLowerCase()};
         ProductCursorWrapper cursor = queryProducts(whereClause, whereArgs, categoryEnum);
         List<Product> products = parseProducts(cursor);
         if(products.size() == 0){
@@ -122,25 +123,18 @@ public class ProductDbHelper extends SQLiteOpenHelper {
     }
 
     public List<Product> findProducts(String culture, String harmfulOrganism, String allNames,
-                                      int activeSubstanceId, ProductCategoryEnum categoryEnum) {
-        String whereClause;
-        String whereArgs[] = {culture.toLowerCase(), harmfulOrganism.toLowerCase(), allNames.toLowerCase()};
-        if(activeSubstanceId != 0) {
-            whereClause = "LOWER(" + ProductEntry.COLUMN_NAME_CONSUMPTION_RATE_AND_PROCESSED_CULTURES
-                            + ") LIKE LOWER(?) AND " +
-                            "UPPER(" + ProductEntry.COLUMN_NAME_HARMFUL_ORGANISM_DISEASE +
-                            ") LIKE LOWER(?) AND LOWER(" + ProductEntry.COLUMN_NAME_ALL_NAMES +
-                            ") LIKE LOWER(?) AND " + ActiveSubstanceEntry.COLUMN_NAME_ENTRY_ID +
-                            " = " + activeSubstanceId;
-        } else {
-            whereClause = "LOWER(" + ProductEntry.COLUMN_NAME_CONSUMPTION_RATE_AND_PROCESSED_CULTURES
-                    + ") LIKE LOWER(?) AND " +
-                    "UPPER(" + ProductEntry.COLUMN_NAME_HARMFUL_ORGANISM_DISEASE +
-                    ") LIKE LOWER(?) AND LOWER(" + ProductEntry.COLUMN_NAME_ALL_NAMES +
-                    ") LIKE LOWER(?) ";
+                                      String activeSubstanceName, ProductCategoryEnum categoryEnum) {
+        String selectionArgs[] = {activeSubstanceName.toLowerCase(), culture.toLowerCase(),
+                harmfulOrganism.toLowerCase(), allNames.toLowerCase()};
+        String sql = "SELECT * from " + categoryEnum.getTableName() + " p JOIN " +
+                categoryEnum.getActiveSubstanceTableName() + " a  ON a." +
+                ActiveSubstanceEntry.COLUMN_NAME_ACTIVE_SUBSTANCE_NAME + " LIKE ? AND p." +
+                ProductEntry.COLUMN_NAME_CONSUMPTION_RATE_AND_PROCESSED_CULTURES + " LIKE ? AND p." +
+                ProductEntry.COLUMN_NAME_HARMFUL_ORGANISM_DISEASE + " LIKE ? AND p." +
+                ProductEntry.COLUMN_NAME_ALL_NAMES + " LIKE ?";
 
-        }
-        ProductCursorWrapper cursor = queryProducts(whereClause, whereArgs, categoryEnum);
+        ProductCursorWrapper cursor =
+                new ProductCursorWrapper(mDatabase.rawQuery(sql, selectionArgs));
         List<Product> products = parseProducts(cursor);
         if(products.size() == 0){
             products.add(new Product());
@@ -162,7 +156,7 @@ public class ProductDbHelper extends SQLiteOpenHelper {
         if(name.equals("%")){
             return new int[]{0};
         }
-        String sql = "SELECT * from " + categoryEnum.getTableName() +
+        String sql = "SELECT * from " + categoryEnum.getActiveSubstanceTableName() +
                 " WHERE LOWER(" + ActiveSubstanceEntry.COLUMN_NAME_ACTIVE_SUBSTANCE_NAME + ") " +
                 "LIKE LOWER(\"" + name.toLowerCase() + "\")";
 
@@ -181,7 +175,8 @@ public class ProductDbHelper extends SQLiteOpenHelper {
 
     private ProductCursorWrapper queryProducts(String whereClause, String[] whereArgs,
                                                ProductCategoryEnum categoryEnum) {
-        Cursor cursor = getCursor(whereClause, whereArgs, categoryEnum);
+        Cursor cursor = getCursor(
+                whereClause, whereArgs, categoryEnum.getTableName());
         return new ProductCursorWrapper(cursor);
     }
 
@@ -205,14 +200,6 @@ public class ProductDbHelper extends SQLiteOpenHelper {
         return values;
     }
 
-    private ContentValues getContentValues(ActiveSubstance substance){
-        ContentValues values = new ContentValues();
-        values.put(ActiveSubstanceEntry.COLUMN_NAME_ENTRY_ID, substance.getId());
-        values.put(ActiveSubstanceEntry.COLUMN_NAME_ACTIVE_SUBSTANCE_NAME, substance.getName());
-
-        return values;
-    }
-
     private List<Product> parseProducts(ProductCursorWrapper cursor){
         List<Product> products = new ArrayList<>();
         try {
@@ -229,7 +216,8 @@ public class ProductDbHelper extends SQLiteOpenHelper {
 
     private ActiveSubstanceCursorWrapper queryActiveSubstances(String whereClause, String[] whereArgs,
                                                               ProductCategoryEnum categoryEnum){
-        Cursor cursor = getCursor(whereClause, whereArgs, categoryEnum);
+        Cursor cursor = getCursor(
+                whereClause, whereArgs, categoryEnum.getActiveSubstanceTableName());
         return new ActiveSubstanceCursorWrapper(cursor);
     }
 
@@ -248,9 +236,9 @@ public class ProductDbHelper extends SQLiteOpenHelper {
     }
 
     private Cursor getCursor(String whereClause, String[] whereArgs,
-                             ProductCategoryEnum categoryEnum) {
+                             String tableName) {
         return mDatabase.query(
-                categoryEnum.getTableName(),
+                tableName,
                 null, // Columns - null выбирает все столбцы
                 whereClause,
                 whereArgs,
@@ -260,43 +248,33 @@ public class ProductDbHelper extends SQLiteOpenHelper {
         );
     }
 
-    private void createTables(SQLiteDatabase db, ProductCategoryEnum categoryEnum){
+    private void createCategoryTablesAndInitData(SQLiteDatabase db, ProductCategoryEnum categoryEnum){
+        // create of active substance table
+        executeSqlScriptFromResource(db, categoryEnum.getTableActiveSubstanceScriptId());
+        // init data for active substance table
+        executeSqlScriptFromResource(db, categoryEnum.getInitialDataActiveSubstanceScriptId());
+        // create of product table
+        executeSqlScriptFromResource(db, categoryEnum.getTableScriptId());
+        // init data for product table
+        executeSqlScriptFromResource(db, categoryEnum.getInitialDataScriptId());
+    }
+
+    private void executeSqlScriptFromResource(SQLiteDatabase db, int resourceId){
         BufferedReader reader;
         try {
             // Open the resource
             InputStream insertsStream = mContext.getResources().
-                    openRawResource(categoryEnum.getTableScriptId());
+                    openRawResource(resourceId);
             reader = new BufferedReader(new InputStreamReader(insertsStream));
 
             // Iterate through lines
             StringBuilder insertStmt = new StringBuilder();
             while (reader.ready()) {
-                insertStmt.append(reader.readLine());
+                insertStmt.append(reader.readLine().toLowerCase());
             }
             String insertScript = insertStmt.toString();
             db.execSQL(insertScript);
             reader.close();
-        } catch (IOException e) {
-            Log.e(TAG, e.getMessage());
-        }
-    }
-
-    private void insertInitialData(SQLiteDatabase db, ProductCategoryEnum categoryEnum){
-        BufferedReader insertReader;
-        try {
-            // Open the resource
-            InputStream insertsStream = mContext.getResources().
-                    openRawResource(categoryEnum.getInitialDataScriptId());
-            insertReader = new BufferedReader(new InputStreamReader(insertsStream));
-
-            // Iterate through lines
-            StringBuilder insertStmt = new StringBuilder();
-            while (insertReader.ready()) {
-                insertStmt.append(insertReader.readLine());
-            }
-            String insertScript = insertStmt.toString().toLowerCase();
-            db.execSQL(insertScript);
-            insertReader.close();
         } catch (IOException e) {
             Log.e(TAG, e.getMessage());
         }

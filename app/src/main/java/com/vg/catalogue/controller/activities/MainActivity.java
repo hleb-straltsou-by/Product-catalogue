@@ -19,6 +19,7 @@ import com.vg.catalogue.controller.fragments.FullSearchFragment;
 import com.vg.catalogue.controller.fragments.MiniSearchFragment;
 import com.vg.catalogue.controller.fragments.ProductFragment;
 import com.vg.catalogue.controller.fragments.ProductListFragment;
+import com.vg.catalogue.enums.ProductCategoryEnum;
 import com.vg.catalogue.model.Product;
 
 public class MainActivity extends AppCompatActivity {
@@ -26,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String KEY_FRAGMENT_CLASS = "fragment_class";
 
     private static final String KEY_SELECTED_PRODUCT = "selected_product";
+
+    private static final String KEY_PRODUCT_CATEGORY = "product_category";
 
     private static final int NAVBAR_CATALOG_TAB_POSITION = 0;
 
@@ -35,7 +38,9 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int NAVBAR_DEFAULT_TAB_POSITION = 0;
 
-    public static String filterPatternNameParam;
+    private static String filterPatternNameParam;
+
+    private static ProductCategoryEnum category;
 
     private Fragment mFragment;
 
@@ -46,10 +51,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static Intent newIntent(Context context, Class<? extends Fragment> fragmentClass,
-                                   String filterPatternName){
+                                   String filterPatternName, ProductCategoryEnum categoryEnum){
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra(KEY_FRAGMENT_CLASS, fragmentClass);
+        intent.putExtra(KEY_PRODUCT_CATEGORY, categoryEnum);
         filterPatternNameParam = filterPatternName;
+        category = categoryEnum;
+
         return intent;
     }
 
@@ -75,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 transaction.add(R.id.single_fragment_container_with_bottom_navbar,
                         MiniSearchFragment.newInstance());
                 transaction.add(R.id.single_fragment_container_with_bottom_navbar,
-                        ProductListFragment.newInstance(filterPatternNameParam));
+                        ProductListFragment.newInstance(filterPatternNameParam, category));
 
             } else {
                 transaction.add(R.id.single_fragment_container_with_bottom_navbar, mFragment);
