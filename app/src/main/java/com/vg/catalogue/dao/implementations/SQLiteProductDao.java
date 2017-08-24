@@ -49,12 +49,12 @@ public class SQLiteProductDao implements ProductDao{
 
     @Override
     public List<Product> findProducts(String culture, String harmfulOrganism, String allNames,
-                                      int activeSubstanceId, ProductCategoryEnum categoryEnum) {
+                                      String activeSubstanceName, ProductCategoryEnum categoryEnum) {
         return mDbHelper.findProducts(
                 preparePattern(culture),
                 preparePattern(harmfulOrganism),
                 preparePattern(allNames),
-                activeSubstanceId,
+                preparePattern(activeSubstanceName),
                 categoryEnum);
     }
 
