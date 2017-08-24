@@ -158,7 +158,7 @@ public class SQLiteProductDaoTest {
         String activeSubstanceId = "2-эгэ";
 
         String errorMessage = "Size of result list with products doesn't correspond to expected";
-        int expectedListSize = 1;
+        int expectedListSize = 6;
         List<Product> resultList = mProductDao.findProducts(culture, harmfulOrganism,
                 allNames, activeSubstanceId, categoryEnum);
         assertEquals(errorMessage, expectedListSize, resultList.size());
@@ -177,7 +177,7 @@ public class SQLiteProductDaoTest {
         String activeSubstanceId = null;
 
         String errorMessage = "Size of result list with products doesn't correspond to expected";
-        int expectedListSize = 1;
+        int expectedListSize = 230;
         List<Product> resultList = mProductDao.findProducts(culture, harmfulOrganism,
                 allNames, activeSubstanceId, categoryEnum);
         assertEquals(errorMessage, expectedListSize, resultList.size());
@@ -196,7 +196,7 @@ public class SQLiteProductDaoTest {
         String activeSubstanceId = null;
 
         String errorMessage = "Size of result list with products doesn't correspond to expected";
-        int expectedListSize = 230;
+        int expectedListSize = 1265;
         List<Product> resultList = mProductDao.findProducts(culture, harmfulOrganism,
                 allNames, activeSubstanceId, categoryEnum);
         assertEquals(errorMessage, expectedListSize, resultList.size());
@@ -213,7 +213,7 @@ public class SQLiteProductDaoTest {
 
         int[] resultIds = mProductDao.findActiveSubstanceIdsByName(namePattern, category);
         String errorMessage = "Size of result array with products doesn't correspond to expected";
-        int expectedArraySize = 1;
+        int expectedArraySize = 3;
         assertEquals(errorMessage, expectedArraySize, resultIds.length);
     }
 
