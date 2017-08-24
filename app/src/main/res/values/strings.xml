@@ -4,11 +4,13 @@
     <string name="menu_item_search_button_text">Поиск</string>
     <string name="menu_item_contacts_button_text">Контакты</string>
     <string name="action_search">Поиск</string>
+    <string name="search_category_spinner">Выберите категорию</string>
     <string name="search_culture_title">Культура</string>
     <string name="search_harmful_organism_disease_title">Вредный организм</string>
     <string name="search_all_names_title">Торговое название</string>
     <string name="search_active_substance">Действующее вещество</string>
     <string name="mini_search_view_label">Введите торговое название</string>
+    <string name="mini_search_category_spinner">Категория:</string>
     <string name="no_items_found_label">НЕ НАЙДЕНО НИ ОДНОГО ЭЛЕМЕНТА ПО ЗАПРОСУ</string>
 
     <!-- Product attributes -->
@@ -21,4 +23,11 @@
     <string name="product_operating_principle">Способ, время обработки, ограничения</string>
     <string name="product_days_till_last_harvest">Срок последней обработки</string>
     <string name="product_treatments_multiplicity">Кратность обработок</string>
+
+    <!-- Product categories in russian -->
+    <string name="herbicides_ru">Гербициды</string>
+    <string name="fungicides_ru">Фунгициды</string>
+    <string name="inseticides_ru">Инсектициды</string>
+    <string name="growth_regulators_ru">Регуляторы роста</string>
+    <string name="herbicides_pav_ru">Гербициды с ПАВ или адъювантами</string>
 </resources>
